@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ProductImp implements ProductService{
@@ -26,7 +27,6 @@ public class ProductImp implements ProductService{
             return responceDto;
         }
         Product product = new Product();
-        product.setId(productDto.getId());
         product.setName(productDto.getName());
         product.setDescription(productDto.getDescription());
         product.setPrice(productDto.getPrice());
@@ -48,6 +48,19 @@ public class ProductImp implements ProductService{
             responceDto.setMessage("No Product is Found");
             return responceDto;
         }
+        List<ProductDto> productDto = products.stream().map(product -> {
+            ProductDto dto = new ProductDto();
+            dto.setId(product.getId());
+            dto.setName(product.getName());
+            dto.setDescription(product.getDescription());
+            dto.setPrice(product.getPrice());
+            dto.setStock(product.getStock());
+            return dto;
+        }).collect(Collectors.toList());
 
+        responceDto.setCode("SUCCESS");
+        responceDto.setMessage("Products retrieved successfully");
+        responceDto.setData(productDto);
+        return responceDto;
     }
 }

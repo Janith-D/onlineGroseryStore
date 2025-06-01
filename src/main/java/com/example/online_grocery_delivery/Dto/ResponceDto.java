@@ -12,8 +12,8 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ResponceDto {
+public class ResponceDto<T> {
     private String code;
     private String message;
-    private List<Product> data;
+    private T data;
 }
