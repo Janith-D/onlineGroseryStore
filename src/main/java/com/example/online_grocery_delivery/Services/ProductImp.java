@@ -1,7 +1,7 @@
 package com.example.online_grocery_delivery.Services;
 
 import com.example.online_grocery_delivery.Dto.ProductDto;
-import com.example.online_grocery_delivery.Dto.ResponceDto;
+import com.example.online_grocery_delivery.Dto.ResponseDto;
 import com.example.online_grocery_delivery.Entity.Product;
 import com.example.online_grocery_delivery.Repo.ProductRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,14 +17,14 @@ public class ProductImp implements ProductService{
     private ProductRepo productRepo;
 
     @Override
-    public ResponceDto createProduct(ProductDto productDto) {
-        ResponceDto responceDto = new ResponceDto();
+    public ResponseDto<ProductDto> createProduct(ProductDto productDto) {
+        ResponseDto<ProductDto> responseDto = new ResponseDto<>();
 
         Product exitingProduct = productRepo.findById(productDto.getId());
         if(exitingProduct != null){
-            responceDto.setCode("ERROR");
-            responceDto.setMessage("The Product All Ready ");
-            return responceDto;
+            responseDto.setCode("ERROR");
+            responseDto.setMessage("The Product All Ready ");
+            return responseDto;
         }
         Product product = new Product();
         product.setName(productDto.getName());
@@ -33,20 +33,20 @@ public class ProductImp implements ProductService{
         product.setStock(productDto.getStock());
 
         productRepo.save(product);
-        responceDto.setCode("SUCCESS");
-        responceDto.setMessage("Product created successfully");
-        return responceDto;
+        responseDto.setCode("SUCCESS");
+        responseDto.setMessage("Product created successfully");
+        return responseDto;
     }
 
     @Override
-    public ResponceDto getAllProducts(){
-        ResponceDto responceDto = new ResponceDto();
+    public ResponseDto<ProductDto> getAllProducts(){
+        ResponseDto<ProductDto> responseDto = new ResponseDto<>();
 
         List<Product> products = productRepo.findAll();
         if (products.isEmpty()){
-            responceDto.setCode("ERROR");
-            responceDto.setMessage("No Product is Found");
-            return responceDto;
+            responseDto.setCode("ERROR");
+            responseDto.setMessage("No Product is Found");
+            return responseDto;
         }
         List<ProductDto> productDto = products.stream().map(product -> {
             ProductDto dto = new ProductDto();
@@ -58,9 +58,9 @@ public class ProductImp implements ProductService{
             return dto;
         }).collect(Collectors.toList());
 
-        responceDto.setCode("SUCCESS");
-        responceDto.setMessage("Products retrieved successfully");
-        responceDto.setData(productDto);
-        return responceDto;
+        responseDto.setCode("SUCCESS");
+        responseDto.setMessage("Products retrieved successfully");
+        responseDto.setDataList(productDto);
+        return responseDto;
     }
 }

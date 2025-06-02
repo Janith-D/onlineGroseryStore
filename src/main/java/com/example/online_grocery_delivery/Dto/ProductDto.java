@@ -6,8 +6,6 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
-@Setter
 public class ProductDto {
     private long id;
     private String name;

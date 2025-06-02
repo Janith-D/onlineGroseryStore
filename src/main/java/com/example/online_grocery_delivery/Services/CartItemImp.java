@@ -1,7 +1,7 @@
 package com.example.online_grocery_delivery.Services;
 
 import com.example.online_grocery_delivery.Dto.CartDto;
-import com.example.online_grocery_delivery.Dto.ResponceDto;
+import com.example.online_grocery_delivery.Dto.ResponseDto;
 import com.example.online_grocery_delivery.Entity.Cart;
 import com.example.online_grocery_delivery.Entity.Product;
 import com.example.online_grocery_delivery.Repo.CartRepo;
@@ -21,14 +21,14 @@ public class CartItemImp implements CartItemService{
     @Autowired
     private ProductRepo productRepo;
     @Override
-    public ResponceDto addCartItem(CartDto cartDto) {
-        ResponceDto responceDto = new ResponceDto();
+    public ResponseDto addCartItem(CartDto cartDto) {
+        ResponseDto responseDto = new ResponseDto();
 
         Product product = productRepo.findById(cartDto.getProductId()).orElse(null);
         if (product == null){
-            responceDto.setCode("ERROR");
-            responceDto.setMessage("Product not found");
-            return responceDto;
+            responseDto.setCode("ERROR");
+            responseDto.setMessage("Product not found");
+            return responseDto;
         }
 
         Cart cartItem = new Cart();
@@ -36,20 +36,20 @@ public class CartItemImp implements CartItemService{
         cartItem.setQuantity(cartDto.getQuantity());
         cartRepo.save(cartItem);
 
-        responceDto.setCode("SUCCESS");
-        responceDto.setMessage("Cart Item added successfully");
-        return  responceDto;
+        responseDto.setCode("SUCCESS");
+        responseDto.setMessage("Cart Item added successfully");
+        return responseDto;
     }
 
     @Override
-    public ResponceDto getAllCartItems() {
-        ResponceDto responceDto = new ResponceDto();
+    public ResponseDto getAllCartItems() {
+        ResponseDto responseDto = new ResponseDto();
         List<Cart> cartItem = cartRepo.findAll();
 
         if (cartItem.isEmpty()){
-            responceDto.setCode("ERROR");
-            responceDto.setMessage("No items in the cart");
-            return responceDto;
+            responseDto.setCode("ERROR");
+            responseDto.setMessage("No items in the cart");
+            return responseDto;
         }
 
         List<CartDto> cartItemDto = cartItem.stream().map(item ->{
@@ -59,9 +59,9 @@ public class CartItemImp implements CartItemService{
             return dto;
         }).collect(Collectors.toList());
 
-        responceDto.setCode("SUCCESS");
-        responceDto.setMessage("Cart items retrieved");
-        responceDto.setData(cartItemDto);
-        return responceDto;
+        responseDto.setCode("SUCCESS");
+        responseDto.setMessage("Cart items retrieved");
+        responseDto.setData(cartItemDto);
+        return responseDto;
     }
 }

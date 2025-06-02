@@ -1,11 +1,9 @@
 package com.example.online_grocery_delivery.Dto;
 
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -13,6 +11,9 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class OrderDto {
+    private Long id;
+    private LocalDateTime time;
     private String customerName;
+    private double totalPrice;
     private List<CartDto> items;
 }
