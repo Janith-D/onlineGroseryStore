@@ -1,6 +1,7 @@
 package com.example.online_grocery_delivery.Services;
 
 import com.example.online_grocery_delivery.Dto.CartDto;
+import com.example.online_grocery_delivery.Dto.EmailDto;
 import com.example.online_grocery_delivery.Dto.OrderDto;
 import com.example.online_grocery_delivery.Dto.ResponseDto;
 import com.example.online_grocery_delivery.Entity.Cart;
@@ -23,6 +24,9 @@ public class OrderImp implements OrderService {
 
     @Autowired
     private OrderRepo orderRepo;
+
+    @Autowired
+    private EmailImp emailImp;
 
     @Override
     public ResponseDto<?> placeOrder() {
@@ -55,6 +59,12 @@ public class OrderImp implements OrderService {
                 .totalPrice(orders.getTotalPrice())
                 .items(cartItemsDto)
                 .build();
+
+        EmailDto emailDto = new EmailDto();
+        emailDto.setRecipient(orderDto.getCustomerName());
+        emailDto.setSubject("ORDER PLACEMENT");
+        emailDto.setMessageBody("Dear Customer your order is Placement!");
+        emailImp.sendEmail(emailDto);
 
         responce.setCode("SUCCESS");
         responce.setMessage("Order placed successfully");
